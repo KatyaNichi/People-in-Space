@@ -1,23 +1,38 @@
-import logo from './logo.svg';
+import React, { useState, useEffect} from 'react';
 import './App.css';
+import Header from './Components/Header';
+import People from './Components/People';
+
 
 function App() {
+  const [people, setPeople] = useState([]);
+  const [coordinates, setCoordinates] = useState([]);
+
+  useEffect(() => {
+    async function fetchPeople() {
+      let result = await fetch('http://api.open-notify.org/astros.json');
+      let data = await result.json();
+      setPeople(data.people);
+    }
+
+    async function fetchCoordinates() {
+      let result = await fetch('http://api.open-notify.org/iss-now.json');
+      let data = await result.json();
+      setCoordinates(data.iss_position);
+    }
+
+    fetchPeople();
+    fetchCoordinates();
+
+  }, [])
+
+  console.log('people', people)
+  console.log('coordinates', coordinates);
   return (
+    
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header />
+      <People data={people} />
     </div>
   );
 }
