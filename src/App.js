@@ -6,7 +6,7 @@ import People from './Components/People';
 
 function App() {
   const [people, setPeople] = useState([]);
-  const [coordinates, setCoordinates] = useState([]);
+  const [number, setAmount] = useState([]);
 
   useEffect(() => {
     async function fetchPeople() {
@@ -15,23 +15,23 @@ function App() {
       setPeople(data.people);
     }
 
-    async function fetchCoordinates() {
-      let result = await fetch('http://api.open-notify.org/iss-now.json');
+    async function fetchAmount() {
+      let result = await fetch('http://api.open-notify.org/astros.json');
       let data = await result.json();
-      setCoordinates(data.iss_position);
+      setAmount(data.number);
     }
 
     fetchPeople();
-    fetchCoordinates();
+    fetchAmount();
 
   }, [])
 
   console.log('people', people)
-  console.log('coordinates', coordinates);
+  console.log('amount', number);
   return (
     
     <div className="App">
-      <Header />
+      <Header  data={number} />
       <People data={people} />
     </div>
   );
